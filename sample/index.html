@@ -1,37 +1,89 @@
+<!DOCTYPE html>
 <html>
-<script>
+<head>
+	<title>Login Page</title>
+	<style>
+		/* Add some basic styling to the page */
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f8f8f8;
+		}
+		h1 {
+			margin-top: 50px;
+			text-align: center;
+		}
+		form {
+			max-width: 500px;
+			margin: 50px auto;
+			background-color: white;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+		}
+		input[type="text"], input[type="email"], input[type="password"] {
+			display: block;
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+		button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: all 0.3s ease-in-out;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+	<script>
+		function sendLoginRequest() {
+			// Get the user's input from the form
+			const username = document.getElementById('username').value;
+			const password = document.getElementById('password').value;
 
-function HandleLoginResponse(response)
-{
-	var text = JSON.parse(response);
-//	document.getElementById("textResponse").innerHTML = response+"<p>";	
-	document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
-}
+			// Create a new XMLHttpRequest object
+			const xhr = new XMLHttpRequest();
 
-function SendLoginRequest(username,password)
-{
-	var request = new XMLHttpRequest();
-	request.open("POST","login.php",true);
-	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-	request.onreadystatechange= function ()
-	{
-		
-		if ((this.readyState == 4)&&(this.status == 200))
-		{
-			HandleLoginResponse(this.responseText);
-		}		
-	}
-	request.send("type=login&uname="+username+"&pword="+password);
-}
-</script>
+			// Set up the request parameters
+			xhr.open('POST', 'https://my-backend-server.com/api/login');
+			xhr.setRequestHeader('Content-Type', 'application/json');
 
-<h1>login page</h1>
+			// Set up the callback function to handle the response
+			xhr.onload = function() {
+				// Handle the response from the server
+				if (xhr.status === 200) {
+					const response = JSON.parse(xhr.responseText);
+					console.log('Login successful:', response);
+				} else {
+					console.error('Error logging in:', xhr.responseText);
+				}
+			};
+
+			// Send the request to the server
+			xhr.send(JSON.stringify({ username, password }));
+		}
+	</script>
+</head>
 <body>
-<div id="textResponse">
-awaiting response
-</div>
-<script>
-SendLoginRequest("kehoed","12345");
-</script>
+	<h1>Login Page</h1>
+	<form>
+		<div>
+			<label for="username">Username:</label>
+			<input type="text" id="username" name="username" required>
+		</div>
+		<div>
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" required>
+		</div>
+		<button type="button" onclick="sendLoginRequest()">Submit</button>
+	</form>
 </body>
 </html>
