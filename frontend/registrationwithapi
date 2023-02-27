@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration Page</title>
+</head>
+<body>
+	<h1>Registration Form</h1>
+	<form>
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required><br><br>
+
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required><br><br>
+
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required><br><br>
+
+		<button id="register-button" type="submit">Register</button>
+	</form>
+
+	<script>
+		const form = document.querySelector('form');
+		const registerButton = document.querySelector('#register-button');
+		const apiUrl = 'https://example.com/api/register'; // replace with your backend API endpoint
+
+		registerButton.addEventListener('click', (event) => {
+			event.preventDefault();
+
+			// get form values
+			const username = document.querySelector('#username').value;
+			const email = document.querySelector('#email').value;
+			const password = document.querySelector('#password').value;
+
+			// create request object
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', apiUrl);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+
+			// set request callback
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						console.log(xhr.responseText);
+						// handle successful response
+					} else {
+						console.log('Error: ' + xhr.status);
+						// handle error response
+					}
+				}
+			};
+
+			// send request with form data
+			const formData = {
+				username: username,
+				email: email,
+				password: password
+			};
+			xhr.send(JSON.stringify(formData));
+		});
+	</script>
+</body>
+</html>
